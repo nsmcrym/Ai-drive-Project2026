@@ -25,7 +25,10 @@ app.set('views', path.join(appDirectory, 'views')); // EJSファイルを保存�
 
 // 「/」にアクセスされたときの処理
 app.get('/', (req: Request, res: Response): void => {
-    res.render('index');
+    res.render('index', {
+        title: 'My Express Site',
+        message: 'Vercelで公開しました！'
+    });
 });
 
 
