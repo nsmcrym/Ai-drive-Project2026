@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import path from 'path';
+import { pool } from './db';
 
 
 const app = express(); // Expressアプリケーションを作成
