@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import path from 'path';
 import { pool } from './db';
+import { todoPageRouter, todoRouter } from './src/apps/todo/todoRouter';
 
 
 const app = express(); // Expressアプリケーションを作成
@@ -120,6 +121,9 @@ app.get('/api/db-check', async (_req, res) => {
 // サーバー起動
 // ------------------------------
 
+
+app.use('/todo', todoPageRouter);
+app.use('/api/v1/todos', todoRouter);
 
 if (require.main === module) {
     app.listen(port, (): void => {
