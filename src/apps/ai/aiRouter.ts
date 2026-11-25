@@ -1,11 +1,8 @@
 import express, { Router } from 'express';
-import type { ErrorRequestHandler, RequestHandler, Response } from 'express';
+import type { ErrorRequestHandler, RequestHandler } from 'express';
+import { getHistory, sendError } from './aiController';
 
 export const aiRouter = Router();
-
-function sendError(res: Response, status: number, code: string, message: string): void {
-    res.status(status).json({ success: false, error: { code, message } });
-}
 
 aiRouter.use((_req, res, next) => {
     if (process.env.VERCEL_ENV === 'production' || process.env.AI_DEMO_ENABLED !== 'true') {
@@ -23,12 +20,12 @@ const requireJson: RequestHandler = (req, res, next) => {
     next();
 };
 
-// 後続の作業で履歴取得と質問処理を接続する。
+// 質問処理は後続の作業で接続する。
 const notImplemented: RequestHandler = (_req, res) => {
     sendError(res, 501, 'NOT_IMPLEMENTED', 'この機能は準備中です。');
 };
 
-aiRouter.get('/history', notImplemented);
+aiRouter.get('/history', getHistory);
 aiRouter.post('/ask', requireJson, express.json({ limit: 16_384 }), notImplemented);
 
 aiRouter.use((_req, res) => {
