@@ -24,7 +24,14 @@ export async function generateAnswer(prompt: string): Promise<string> {
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-                body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: prompt }] }] }),
+                body: JSON.stringify({
+                    systemInstruction: {
+                        parts: [{
+                            text: '回答はプレーンテキストで書いてください。Markdown、HTML、LaTeXの書式は使わず、数式や単位は km² や「平方キロメートル」のようにそのまま読める形で表記してください。',
+                        }],
+                    },
+                    contents: [{ role: 'user', parts: [{ text: prompt }] }],
+                }),
                 redirect: 'error',
                 signal,
             },
