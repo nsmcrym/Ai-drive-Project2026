@@ -22,3 +22,17 @@
 
 - 実DBでの制約・接続断・保存結果、実Gemini通信と実時間での期限、実ブラウザでの描画は未検証。再確認する場合、検証用DBにTASK-02のSQLが適用済みか確認し、ローカルのサーバープロセスで既存の `DATABASE_URL` と `GEMINI_API_KEY`、`GEMINI_MODEL`、`AI_DEMO_ENABLED=true` を使う。障害の再現には検証環境またはスタブを使用する。
 - Preview・Productionの実環境確認はTASK-09。TASK-08のスタブ検証にSQL実行、環境変数の永続登録、公開設定変更は不要だった。
+
+## TASK-09 PreviewとProductionの確認
+
+対象は REQ-AI-F006、REQ-AI-N001、REQ-AI-N002、REQ-AI-N004。詳細は [READMEのAI質問デモ確認手順](../../README.md#ai質問デモの確認) を参照。
+
+| ID | 確認項目 | 期待結果 | 実測 |
+|---|---|---|---|
+| T-AI-0901 | ローカルHTTPでPreview相当の無効・未設定と、Production相当の明示的な有効設定を確認 | 両APIは `503 DEMO_DISABLED`。不正JSONのPOSTも停止が優先され、Gemini・DBは呼ばれない。TOP・TODO・AI画面は表示できる。 | 合格。ビルド済みアプリとスタブで3設定すべてを確認した。 |
+| T-AI-0902 | Preview有効化前に、未認証で画面・両APIへ直接アクセス | Vercelのアクセス保護で遮断される。 | 未実施。 |
+| T-AI-0903 | 有効化後の同じPreviewで、未認証の直接アクセスを再確認 | 画面・両APIへのアクセスが引き続き遮断される。 | 未実施。 |
+| T-AI-0904 | 有効化後の同じPreviewで、許可された利用者が質問・履歴を取得 | 質問は `201`、履歴は `200`。保存した項目が履歴に含まれ、ブラウザに秘密値が渡らない。 | 未実施。 |
+| T-AI-0905 | 実Productionの両AI APIとTOP・TODO | 両APIは `503 DEMO_DISABLED`。TOP・TODO v1/v2は利用できる。 | 未実施。 |
+
+実環境の確認時に、対象URL、コミット、確認日と実測を追記する。ローカル検証では実DB操作、環境変数の永続登録、公開設定変更を行っていない。
