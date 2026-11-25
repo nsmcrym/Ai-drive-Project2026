@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 import type { ErrorRequestHandler, RequestHandler } from 'express';
-import { getHistory, sendError } from './aiController';
+import { ask, getHistory, sendError } from './aiController';
 
 export const aiRouter = Router();
 
@@ -20,13 +20,8 @@ const requireJson: RequestHandler = (req, res, next) => {
     next();
 };
 
-// 質問処理は後続の作業で接続する。
-const notImplemented: RequestHandler = (_req, res) => {
-    sendError(res, 501, 'NOT_IMPLEMENTED', 'この機能は準備中です。');
-};
-
 aiRouter.get('/history', getHistory);
-aiRouter.post('/ask', requireJson, express.json({ limit: 16_384 }), notImplemented);
+aiRouter.post('/ask', requireJson, express.json({ limit: 16_384 }), ask);
 
 aiRouter.use((_req, res) => {
     sendError(res, 404, 'NOT_FOUND', '指定されたAI APIが見つかりません。');
