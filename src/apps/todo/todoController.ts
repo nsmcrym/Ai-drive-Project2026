@@ -15,11 +15,11 @@ const errorCodes = {
     503: 'DB_UNAVAILABLE',
 } as const;
 
-function sendError(res: Response, status: keyof typeof errorCodes, message: string) {
+export function sendError(res: Response, status: keyof typeof errorCodes, message: string) {
     res.status(status).json({ status: 'error', code: errorCodes[status], message, details: [] });
 }
 
-function getTodoId(value: string, res: Response) {
+export function getTodoId(value: string, res: Response) {
     const id = Number(value);
     if (!/^\d+$/.test(value) || id < 1) {
         sendError(res, 400, 'IDは1以上の整数で指定してください。');
@@ -28,8 +28,8 @@ function getTodoId(value: string, res: Response) {
     return id;
 }
 
-const maxDatabaseId = 2_147_483_647;
-const notFound = 'TODOが見つかりません。';
+export const maxDatabaseId = 2_147_483_647;
+export const notFound = 'TODOが見つかりません。';
 
 export async function list(_req: Request, res: Response) {
     res.json({ status: 'success', data: await listTodos() });

@@ -12,7 +12,7 @@ export class TodoDatabaseUnavailable extends Error {}
 
 const todoColumns = 'id, title, is_completed, created_at';
 
-async function query<Row extends QueryResultRow>(sql: string, values: unknown[] = []) {
+export async function query<Row extends QueryResultRow>(sql: string, values: unknown[] = []) {
     const client = await pool.connect().catch((cause: unknown) => {
         throw new TodoDatabaseUnavailable('DB接続を取得できません', { cause });
     });

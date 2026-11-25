@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TODO V2</title>
+    <script src="/todo/v2/todo.js" defer></script>
+</head>
+<body>
+    <main id="todo-v2">
+        <h1>TODO V2</h1>
+        <p><a href="/todo">TODO V1へ</a></p>
+        <fieldset id="todo-controls" disabled>
+            <legend>TODOの管理</legend>
+            <form id="todo-form">
+                <label for="todo-title">タイトル</label>
+                <input id="todo-title" maxlength="100" required>
+                <label for="todo-priority">優先度</label>
+                <select id="todo-priority">
+                    <% for (const priority of priorities) { %>
+                        <option value="<%= priority %>" <%= priority === 'normal' ? 'selected' : '' %>><%= priority %></option>
+                    <% } %>
+                </select>
+                <button type="submit">追加</button>
+            </form>
+            <p>
+                <label for="filter-completed">完了状態で絞り込む</label>
+                <select id="filter-completed">
+                    <option value="">すべて</option>
+                    <option value="false">未完了</option>
+                    <option value="true">完了</option>
+                </select>
+                <label for="filter-priority">優先度で絞り込む</label>
+                <select id="filter-priority">
+                    <option value="">すべて</option>
+                    <% for (const priority of priorities) { %>
+                        <option value="<%= priority %>"><%= priority %></option>
+                    <% } %>
+                </select>
+            </p>
+            <p id="todo-empty" hidden>TODOがありません</p>
+            <ul id="todo-list" aria-label="TODO一覧"></ul>
+        </fieldset>
+        <p id="todo-status" role="status"></p>
+        <p id="todo-error" role="alert"></p>
+    </main>
+</body>
+</html>
