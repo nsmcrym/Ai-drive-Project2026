@@ -3,6 +3,11 @@ import type { ErrorRequestHandler, RequestHandler } from 'express';
 import { ask, getHistory, sendError } from './aiController';
 
 export const aiRouter = Router();
+export const aiPageRouter = Router();
+
+aiPageRouter.get('/', (_req, res) => {
+    res.render('ai/index');
+});
 
 aiRouter.use((_req, res, next) => {
     if (process.env.VERCEL_ENV === 'production' || process.env.AI_DEMO_ENABLED !== 'true') {

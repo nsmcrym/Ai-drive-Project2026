@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import path from 'path';
 import { pool } from './db';
-import { aiRouter } from './src/apps/ai/aiRouter';
+import { aiPageRouter, aiRouter } from './src/apps/ai/aiRouter';
 import { todoPageRouter, todoRouter } from './src/apps/todo/todoRouter';
 import { todoPageRouterV2, todoRouterV2 } from './src/apps/todo/v2/todoRouter';
 
@@ -129,6 +129,7 @@ app.use('/todo', todoPageRouter);
 app.use('/api/v1/todos', todoRouter);
 app.use('/todo-v2', todoPageRouterV2);
 app.use('/api/v2/todos', todoRouterV2);
+app.use('/ai', aiPageRouter);
 
 if (require.main === module) {
     app.listen(port, (): void => {

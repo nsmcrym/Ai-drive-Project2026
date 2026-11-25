@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AI質問</title>
+    <style>
+        #ai-history li p {
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+    </style>
+    <script src="/ai/ai.js" defer></script>
+</head>
+<body>
+    <main>
+        <h1>AI質問</h1>
+        <nav aria-label="戻り先">
+            <a href="/">トップ</a> · <a href="/todo">TODO</a> · <a href="/todo-v2">TODO V2</a>
+        </nav>
+        <section aria-labelledby="ai-history-heading">
+            <h2 id="ai-history-heading">質問履歴</h2>
+            <button id="ai-history-refresh" type="button" disabled>履歴を更新</button>
+            <p id="ai-history-status" role="status"></p>
+            <p id="ai-history-error" role="alert"></p>
+            <ol id="ai-history"></ol>
+        </section>
+    </main>
+</body>
+</html>
