@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import path from 'path';
 import { pool } from './db';
+import { aiRouter } from './src/apps/ai/aiRouter';
 import { todoPageRouter, todoRouter } from './src/apps/todo/todoRouter';
 import { todoPageRouterV2, todoRouterV2 } from './src/apps/todo/v2/todoRouter';
 
@@ -14,6 +15,7 @@ const appDirectory = path.basename(__dirname) === 'dist' ? path.dirname(__dirnam
 // ------------------------------
 // Expressの基本設定
 // ------------------------------
+app.use('/api/ai', aiRouter);
 app.use(express.urlencoded({ extended: true })); // フォームから送信されたデータを受け取れるようにする
 app.use(express.static(path.join(appDirectory, 'public'))); // CSSや画像などの静的ファイルを公開する
 app.engine('ejs', require('ejs').renderFile); // Vercel が EJS を依存関係として検出できるようにする
