@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { listAiQaLogs, saveAiQaLog } from './aiModel';
-import { generateMockAnswer } from './aiService';
+import { generateAnswer, GeminiError } from './aiService';
 
 export function sendError(res: Response, status: number, code: string, message: string): void {
     res.status(status).json({ success: false, error: { code, message } });
@@ -20,7 +20,20 @@ export async function ask(req: Request, res: Response): Promise<void> {
         return;
     }
 
-    const responseText = generateMockAnswer();
+    let responseText: string;
+    try {
+        responseText = await generateAnswer(prompt);
+    } catch (error) {
+        if (!(error instanceof GeminiError)) {
+            throw error;
+        }
+        if (error.code === 'INTERNAL_ERROR') {
+            sendError(res, 500, error.code, '現在処理できません。');
+        } else {
+            sendError(res, error.code === 'AI_TIMEOUT' ? 504 : 502, error.code, 'AI回答を取得できませんでした。');
+        }
+        return;
+    }
     let item: Awaited<ReturnType<typeof saveAiQaLog>>;
     try {
         item = await saveAiQaLog(prompt, responseText);
